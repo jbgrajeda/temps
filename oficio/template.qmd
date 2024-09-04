@@ -1,0 +1,10 @@
+---
+title: "Informe de situación"
+subtitle: "Maestría en Intervención Social Gerobtológica"
+format: 
+  docx:
+    reference-doc: TEMP.docx
+editor: visual
+---
+
+## 
