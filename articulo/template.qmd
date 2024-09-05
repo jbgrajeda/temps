@@ -1,10 +1,14 @@
 ---
 title: "Informe de situación"
-subtitle: "Maestría en Intervención Social Gerobtológica"
 format: 
   docx:
     reference-doc: TEMP.docx
+
 editor: visual
+bibliography: references.bib
+csl: apa7.csl
 ---
 
-## 
+## Intoducción
+
+La investigación [@espelt2016]
