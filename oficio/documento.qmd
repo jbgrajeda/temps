@@ -1,0 +1,35 @@
+---
+format: 
+  docx:
+    reference-doc: TEMP.docx
+editor: visual
+---
+
+### Victoria de Duurango, Dgo., a 31 de octubre de 2024
+
+# Miembra del Consejo de Investigación
+# Facultad de Trabajo Social, UJED
+# PRESENTE:
+#
+Por este medio le saludo y aprovecho para citarle a la sesión del **Consejo de Investigación** que se llevará a cabo el día 7 de noviembre de 2024 en la **Sala de Capacitación** de nuestra Facultad, en primer citatorio a las 8:15hrs. y segundo citatorio 8:30hrs. con el siguiente orden del día:
+
+## ORDEN DEL DÍA
+
+| **Orden del Día**                                                                                      |
+|--------------------------------------------------------------------------------------------------------|
+| 1. Bienvenida                                                                                          |
+| 2. Lista de Asistencia                                                                                 |
+| 3. Definición de la agenda de trabajo del Consejo de Investigación                                     |
+| 4. Difusión de la información disponible sobre los apoyos de COCYTED para la actividad investigativa.   |
+|     - Inciso a cargo de la Jefatura de Posgrado e Investigación                                        |
+| 5. Asuntos generales                                                                                   |
+| 6. Cierre                                                                                              |
+
+Sin otro asunto particular, agradezco su atención con la espectativa de su importante asistencia. Quedo de Ud.
+
+## ATENTAMENTE:
+#
+#
+#### DR. JORGE ENRIQUE BRACAMONTES GRAJEDA
+#### Secretario del Consejo de Investigación
+#### Facultad e Trabajo Social, UJED
