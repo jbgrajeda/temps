@@ -2,16 +2,16 @@
 title: "Sociodemografía del envejecimiento"
 subtitle: "Sesión 6: "
 format:
-    revealjs:
-        center: true
-        title-slide-attributes: 
-          data-background-image: "images/fn.png"
-          data-background-size: cover
-          data-background-opacity: 100%
-        theme: black
-        transition: zoom
-        css:
-            - fondo.css
+  revealjs:
+      center: true
+      title-slide-attributes: 
+        data-background-image: "images/fn.png"
+        data-background-size: cover
+        data-background-opacity: 100%
+      theme: black
+      transition: zoom
+      css:
+        - fondo.css
 ---
 
 # Introducción
