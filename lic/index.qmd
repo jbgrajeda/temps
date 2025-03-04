@@ -1,21 +1,19 @@
 ---
-title: "Sociodemografía del envejecimiento"
-subtitle: "Sesión 6: "
+title: "titulo"
+subtitle: "subtitulo"
 format:
   revealjs:
-      center: true
-      title-slide-attributes: 
-        data-background-image: "images/fn.png"
-        data-background-size: cover
-        data-background-opacity: 100%
-      theme: black
-      transition: zoom
-      css:
-        - fondo.css
+    center: true
+    css: [fondo.css]
+    incremental: true
+    theme: black
+    title-slide-attributes:
+      data-background-image: "images/fn.png"
+      data-background-size: "cover"
+      data-background-opacity: "1.0"
 ---
 
-# Introducción
-
+# Introducción 
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
