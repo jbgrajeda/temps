@@ -13,7 +13,7 @@ format:
       data-background-opacity: "1.0"
 ---
 
-# Introducción 
+## Introducción
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
@@ -22,6 +22,7 @@ format:
         let speaking = false;
         let paused = false;
 
+        // Función para leer contenido incremental (fragmentos)
         const readIncrementalContent = (element) => {
             if (utterance && synth.speaking) {
                 synth.cancel();
@@ -30,10 +31,23 @@ format:
 
             if (textToRead.trim() !== '') {
                 utterance = new SpeechSynthesisUtterance(textToRead);
+
+                // Configuración de la voz (opcional)
+                const voices = synth.getVoices();
+                const voice = voices.find(v => v.lang === 'es-ES' || v.lang.startsWith('es-')); // Busca una voz en español
+                if (voice) {
+                    utterance.voice = voice;
+                }
+
+                utterance.volume = 1; // Volumen máximo
+                utterance.rate = 1;   // Velocidad normal
+                utterance.pitch = 1;  // Tono normal
+
                 synth.speak(utterance);
             }
         };
 
+        // Función para leer el contenido visible de la diapositiva actual
         const readCurrentSlide = () => {
             if (utterance && synth.speaking) {
                 synth.cancel();
@@ -50,31 +64,73 @@ format:
 
             if (textToRead.trim() !== '') {
                 utterance = new SpeechSynthesisUtterance(textToRead);
+
+                // Configuración de la voz (opcional)
+                const voices = synth.getVoices();
+                const voice = voices.find(v => v.lang === 'es-ES' || v.lang.startsWith('es-')); // Busca una voz en español
+                if (voice) {
+                    utterance.voice = voice;
+                }
+
+                utterance.volume = 1; // Volumen máximo
+                utterance.rate = 1;   // Velocidad normal
+                utterance.pitch = 1;  // Tono normal
+
                 synth.speak(utterance);
             }
         };
 
+        // Controlar la reproducción con la tecla 'q'
         document.addEventListener('keydown', (event) => {
             if (event.key.toLowerCase() === 'q') {
                 if (paused) {
                     synth.resume();
+                    paused = false;
                 } else {
                     synth.pause();
+                    paused = true;
                 }
-                paused = !paused;
-                speaking = synth.speaking;
             }
         });
 
+        // Leer automáticamente al cambiar de diapositiva
         Reveal.on('slidechanged', (event) => {
             readCurrentSlide();
         });
 
+        // Leer fragmentos cuando se muestren
         Reveal.on('fragmentshown', (event) => {
             readIncrementalContent(event.fragment);
         });
 
-        // Initialize Reveal.js
+        // Controlar la reproducción con un botón (opcional)
+        const playButton = document.createElement('button');
+        playButton.textContent = 'Reproducir';
+        playButton.style.position = 'fixed';
+        playButton.style.bottom = '20px';
+        playButton.style.right = '20px';
+        playButton.style.zIndex = '1000';
+        playButton.style.padding = '10px 20px';
+        playButton.style.fontSize = '16px';
+        playButton.style.backgroundColor = '#007bff';
+        playButton.style.color = 'white';
+        playButton.style.border = 'none';
+        playButton.style.borderRadius = '5px';
+        playButton.style.cursor = 'pointer';
+        document.body.appendChild(playButton);
+
+        playButton.addEventListener('click', () => {
+            if (synth.speaking) {
+                synth.cancel();
+                playButton.textContent = 'Reproducir';
+            } else {
+                readCurrentSlide();
+                playButton.textContent = 'Detener';
+            }
+        });
+
+        // Inicializar reveal.js (si no está ya inicializado)
         Reveal.initialize();
     });
 </script>
+```
