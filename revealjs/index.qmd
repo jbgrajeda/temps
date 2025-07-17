@@ -1,0 +1,225 @@
+---
+format:
+  revealjs:
+    center: true
+    css: [fondo.css]
+    incremental: true
+    theme: simple
+    title-slide-attributes:
+      data-background-image: "images/fn.png"
+      data-background-size: "cover"
+      data-background-opacity: "1.0"
+---
+
+##  {.slide background-image="images/fn.png" background-size="cover" background-position="center"}
+
+------------------------------------------------------------------------
+
+## Introducción
+
+---
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const synth = window.speechSynthesis;
+        let utterance;
+        let speaking = false;
+        let paused = false;
+
+        // --- Inicio del nuevo código para el botón ---
+        const fullscreenButton = document.createElement('button');
+        fullscreenButton.id = 'fullscreenButton';
+        fullscreenButton.textContent = 'Pantalla Completa';
+        fullscreenButton.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 12px 20px;
+            background-color: #ff7300;
+            color: #ffffcc;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        `;
+        document.body.appendChild(fullscreenButton); // Agrega el botón al body
+        // --- Fin del nuevo código para el botón ---
+
+        // Función para leer contenido incremental (fragmentos)
+        const readIncrementalContent = (element) => {
+            if (utterance && synth.speaking) {
+                synth.cancel();
+            }
+            let textToRead = element.textContent;
+
+            if (textToRead.trim() !== '') {
+                utterance = new SpeechSynthesisUtterance(textToRead);
+
+                // Configuración de la voz (opcional)
+                const voices = synth.getVoices();
+                const voice = voices.find(v => v.lang === 'es-ES' || v.lang.startsWith('es-')); // Busca una voz en español
+                if (voice) {
+                    utterance.voice = voice;
+                }
+
+                utterance.volume = 1; // Volumen máximo
+                utterance.rate = 1;    // Velocidad normal
+                utterance.pitch = 1;   // Tono normal
+
+                synth.speak(utterance);
+            }
+        };
+
+        // Función para leer el contenido visible de la diapositiva actual
+        const readCurrentSlide = () => {
+            if (utterance && synth.speaking) {
+                synth.cancel();
+            }
+            const currentSlide = document.querySelector('.present');
+            const visibleElements = currentSlide.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li:not([aria-hidden="true"]):not(.fragment)');
+            let textToRead = '';
+
+            visibleElements.forEach((el) => {
+                if (getComputedStyle(el).display !== 'none') {
+                    textToRead += el.textContent + ' ';
+                }
+            });
+
+            if (textToRead.trim() !== '') {
+                utterance = new SpeechSynthesisUtterance(textToRead);
+
+                // Configuración de la voz (opcional)
+                const voices = synth.getVoices();
+                const voice = voices.find(v => v.lang === 'es-ES' || v.lang.startsWith('es-')); // Busca una voz en español
+                if (voice) {
+                    utterance.voice = voice;
+                }
+
+                utterance.volume = 1; // Volumen máximo
+                utterance.rate = 1;    // Velocidad normal
+                utterance.pitch = 1;   // Tono normal
+
+                synth.speak(utterance);
+            }
+        };
+
+        // Controlar la reproducción con la tecla 'q'
+        document.addEventListener('keydown', (event) => {
+            if (event.key.toLowerCase() === 'q') {
+                if (paused) {
+                    synth.resume();
+                    paused = false;
+                } else {
+                    synth.pause();
+                    paused = true;
+                }
+            }
+        });
+
+        // Leer automáticamente al cambiar de diapositiva
+        Reveal.on('slidechanged', (event) => {
+            readCurrentSlide();
+        });
+
+        // Leer fragmentos cuando se muestren
+        Reveal.on('fragmentshown', (event) => {
+            readIncrementalContent(event.fragment);
+        });
+
+        // Controlar la reproducción con un botón (opcional)
+        const playButton = document.createElement('button');
+        playButton.textContent = 'Reproducir';
+        playButton.style.position = 'fixed';
+        playButton.style.bottom = '20px';
+        playButton.style.right = '20px';
+        playButton.style.zIndex = '1000';
+        playButton.style.padding = '10px 20px';
+        playButton.style.fontSize = '16px';
+        playButton.style.backgroundColor = '#007bff';
+        playButton.style.color = 'white';
+        playButton.style.border = 'none';
+        playButton.style.borderRadius = '5px';
+        playButton.style.cursor = 'pointer';
+        document.body.appendChild(playButton);
+
+        playButton.addEventListener('click', () => {
+            if (synth.speaking) {
+                synth.cancel();
+                playButton.textContent = 'Reproducir';
+            } else {
+                readCurrentSlide();
+                playButton.textContent = 'Detener';
+            }
+        });
+
+        // Inicializar reveal.js (si no está ya inicializado)
+        // Asegúrate de que esta línea esté presente para que Reveal.js funcione
+        Reveal.initialize();
+    });
+</script>
+
+<script>
+// La lógica del botón de pantalla completa se mantiene igual, pero ahora el botón se creará dinámicamente
+// y este script simplemente le asignará la funcionalidad.
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const fullscreenButton = document.getElementById('fullscreenButton');
+
+    // Función para activar/desactivar pantalla completa
+    function toggleFullscreen() {
+        if (!document.fullscreenElement &&    // Standard property
+            !document.mozFullScreenElement && // Firefox
+            !document.webkitFullscreenElement && // Chrome, Safari and Opera
+            !document.msFullscreenElement) {  // IE/Edge
+            // Entrar en pantalla completa
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) { /* Firefox */
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) { /* IE/Edge */
+                document.documentElement.msRequestFullscreen();
+            }
+        } else {
+            // Salir de pantalla completa
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) { /* Firefox */
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE/Edge */
+                document.documentElement.msExitFullscreen();
+            }
+        }
+    }
+
+    // Función para manejar el estado del botón al entrar/salir de pantalla completa
+    function handleFullscreenChange() {
+        if (document.fullscreenElement ||
+            document.mozFullScreenElement ||
+            document.webkitFullscreenElement ||
+            document.msFullscreenElement) {
+            // Estamos en pantalla completa, oculta el botón
+            fullscreenButton.style.display = 'none';
+        } else {
+            // No estamos en pantalla completa, muestra el botón
+            fullscreenButton.style.display = 'block';
+        }
+    }
+
+    // Asignar eventos solo si el botón existe (que lo hará si el script anterior se ejecutó)
+    if (fullscreenButton) {
+        fullscreenButton.addEventListener('click', toggleFullscreen);
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('msfullscreenchange', handleFullscreenChange);
+    }
+});
+</script>
