@@ -1,6 +1,6 @@
 ---
-title: "titulo"
-subtitle: "subtitulo"
+title: "Título"
+subtitle: "Sesión..."
 format:
   revealjs:
     center: true
@@ -14,6 +14,9 @@ format:
 ---
 
 ## Introducción
+---
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
@@ -21,6 +24,28 @@ format:
         let utterance;
         let speaking = false;
         let paused = false;
+
+        // --- Inicio del nuevo código para el botón ---
+        const fullscreenButton = document.createElement('button');
+        fullscreenButton.id = 'fullscreenButton';
+        fullscreenButton.textContent = 'Pantalla Completa';
+        fullscreenButton.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 12px 20px;
+            background-color: #ff7300;
+            color: #ffffcc;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        `;
+        document.body.appendChild(fullscreenButton); // Agrega el botón al body
+        // --- Fin del nuevo código para el botón ---
 
         // Función para leer contenido incremental (fragmentos)
         const readIncrementalContent = (element) => {
@@ -40,8 +65,8 @@ format:
                 }
 
                 utterance.volume = 1; // Volumen máximo
-                utterance.rate = 1;   // Velocidad normal
-                utterance.pitch = 1;  // Tono normal
+                utterance.rate = 1;    // Velocidad normal
+                utterance.pitch = 1;   // Tono normal
 
                 synth.speak(utterance);
             }
@@ -73,8 +98,8 @@ format:
                 }
 
                 utterance.volume = 1; // Volumen máximo
-                utterance.rate = 1;   // Velocidad normal
-                utterance.pitch = 1;  // Tono normal
+                utterance.rate = 1;    // Velocidad normal
+                utterance.pitch = 1;   // Tono normal
 
                 synth.speak(utterance);
             }
@@ -130,7 +155,69 @@ format:
         });
 
         // Inicializar reveal.js (si no está ya inicializado)
+        // Asegúrate de que esta línea esté presente para que Reveal.js funcione
         Reveal.initialize();
     });
 </script>
-```
+
+<script>
+// La lógica del botón de pantalla completa se mantiene igual, pero ahora el botón se creará dinámicamente
+// y este script simplemente le asignará la funcionalidad.
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const fullscreenButton = document.getElementById('fullscreenButton');
+
+    // Función para activar/desactivar pantalla completa
+    function toggleFullscreen() {
+        if (!document.fullscreenElement &&    // Standard property
+            !document.mozFullScreenElement && // Firefox
+            !document.webkitFullscreenElement && // Chrome, Safari and Opera
+            !document.msFullscreenElement) {  // IE/Edge
+            // Entrar en pantalla completa
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) { /* Firefox */
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) { /* IE/Edge */
+                document.documentElement.msRequestFullscreen();
+            }
+        } else {
+            // Salir de pantalla completa
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) { /* Firefox */
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE/Edge */
+                document.documentElement.msExitFullscreen();
+            }
+        }
+    }
+
+    // Función para manejar el estado del botón al entrar/salir de pantalla completa
+    function handleFullscreenChange() {
+        if (document.fullscreenElement ||
+            document.mozFullScreenElement ||
+            document.webkitFullscreenElement ||
+            document.msFullscreenElement) {
+            // Estamos en pantalla completa, oculta el botón
+            fullscreenButton.style.display = 'none';
+        } else {
+            // No estamos en pantalla completa, muestra el botón
+            fullscreenButton.style.display = 'block';
+        }
+    }
+
+    // Asignar eventos solo si el botón existe (que lo hará si el script anterior se ejecutó)
+    if (fullscreenButton) {
+        fullscreenButton.addEventListener('click', toggleFullscreen);
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('msfullscreenchange', handleFullscreenChange);
+    }
+});
+</script>
