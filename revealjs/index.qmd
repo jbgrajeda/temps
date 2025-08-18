@@ -1,14 +1,22 @@
 ---
+project:
+  type: default   # convierte la carpeta en proyecto Quarto
+
+metadata-files:
+  - ../multi.yml 
+
 format:
   revealjs:
+    theme: night
+    hash: true
     center: true
     css: [fondo.css]
     incremental: true
-    theme: simple
     title-slide-attributes:
       data-background-image: "images/fn.png"
       data-background-size: "cover"
       data-background-opacity: "1.0"
+
 ---
 
 ##  {.slide background-image="images/fn.png" background-size="cover" background-position="center"}
