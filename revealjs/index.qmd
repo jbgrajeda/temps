@@ -29,6 +29,26 @@ format:
 
 
 <script>
+// URL de tu servidor multiplex en Render.com
+const serverUrl = 'https://multiplex-t9sz.onrender.com';
+
+// Función para enviar una solicitud al servidor
+function keepAlive() {
+  fetch(serverUrl)
+    .then(response => {
+      console.log('Ping enviado al servidor. Estado:', response.status);
+    })
+    .catch(error => {
+      console.error('Error al enviar el ping:', error);
+    });
+}
+
+// Envía un "ping" cada 10 minutos (600000 milisegundos)
+// Es un intervalo seguro para evitar el tiempo de inactividad de 15 minutos de Render.com
+setInterval(keepAlive, 600000);
+</script>
+
+<script>
     document.addEventListener('DOMContentLoaded', (event) => {
         const synth = window.speechSynthesis;
         let utterance;
