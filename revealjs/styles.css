@@ -1,0 +1,40 @@
+/* 1. Asegura que el contenedor de diapositivas tenga la altura completa de la pantalla */
+.reveal .slides {
+  height: 100vh;
+}
+
+/* 2. Hace que cada diapositiva sea un contenedor Flexbox vertical */
+.reveal .slides section {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Asegura que la sección de la diapositiva ocupe la altura completa */
+}
+
+/* 3. Hace que el contenedor de columnas ocupe todo el espacio disponible */
+.reveal .slides section .columns {
+  display: flex;
+  flex: 1; /* Ocupa todo el espacio vertical disponible */
+  height: 100%;
+}
+
+/* 4. Hace que cada columna ocupe la altura completa del contenedor de columnas */
+.reveal .slides section .column {
+  flex: 1;
+  height: 100%;
+}
+
+/* 5. Centra verticalmente el contenido dentro de la columna específica */
+.reveal .slides section .v-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%; /* **¡CRUCIAL!** Esto asegura que el contenedor del texto ocupe toda la altura */
+}
+
+.reveal .slides section .v-center li {
+  font-size: 3rem;
+  text-align: left; /* Lo he cambiado de nuevo a left para que el texto esté alineado al inicio de la viñeta */
+}
+.reveal .slides section .v-center li {
+  font-size: 3rem; /* Ajusta este valor para el tamaño deseado */
+}
