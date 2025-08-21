@@ -9,6 +9,9 @@
   flex-direction: column;
   height: 100%; /* Asegura que la sección de la diapositiva ocupe la altura completa */
 }
+.cont-tabla {
+    margin-top: 75px; /* Ajusta este valor para mover la tabla más o menos */
+}
 
 /* 3. Hace que el contenedor de columnas ocupe todo el espacio disponible */
 .reveal .slides section .columns {
@@ -37,4 +40,11 @@
 }
 .reveal .slides section .v-center li {
   font-size: 3rem; /* Ajusta este valor para el tamaño deseado */
+}
+
+.fsg{
+  font-size:  3.4rem;
+}
+.fsch{
+  font-size: 2.2rem;
 }
