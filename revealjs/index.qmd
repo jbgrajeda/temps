@@ -20,6 +20,10 @@ format:
       data-background-opacity: "1.0"
 ---
 
+## {.slide background-image="images/fn.png" background-size="cover" background-position="center"}
+
+---
+
 ## Diapositiva de muestra
 
 Este es un ejemplo de diapositiva inicial.  
