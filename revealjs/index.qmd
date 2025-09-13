@@ -4,11 +4,13 @@ project:
 
 metadata-files:
   - ../multi.yml 
-title: "Fuentes para la construcción de ideas de investigación"
+title: ""
 subtitle: "*Taller de Metodología de Investigación I*"
 author: "Dr. Jorge E. Bracamontes G."
 format:
   revealjs:
+    transition: zoom
+    transition-speed: slow
     theme: night
     hash: true
     center: true
@@ -20,22 +22,9 @@ format:
       data-background-opacity: "1.0"
 ---
 
-## {.slide background-image="images/fn.png" background-size="cover" background-position="center"}
 
----
 
-## Diapositiva de muestra
 
-Este es un ejemplo de diapositiva inicial.  
-Puedes escribir texto, listas, tablas, imágenes, etc.  
-
-- Punto 1  
-- Punto 2  
-- Punto 3  
-
-![](images/fuentes1.png)
-
----
 
 <script>
 // URL de tu servidor multiplex en Render.com
