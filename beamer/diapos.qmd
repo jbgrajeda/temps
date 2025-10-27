@@ -1,0 +1,40 @@
+---
+title: "Presentación Beamer en Modo Oscuro"
+author: "Seminario de Tópicos Selectos del Trabajo Social"
+date: ""
+format:
+  beamer:
+    theme: "Dresden"
+    colortheme: "beetle"
+    slide-level: 2
+    # Configuración para inyectar comandos de LaTeX que fuerzan el tema oscuro
+    include-in-header:
+      text: |
+        \usepackage{xcolor}
+        % Aplicamos los colores de Beamer para fondo negro y fuentes blancas
+        \setbeamercolor{background canvas}{bg=black}
+        \setbeamercolor{normal text}{fg=white}
+        \setbeamercolor{structure}{fg=white} % Afecta a títulos y elementos estructurales
+        \setbeamercolor{itemize item}{fg=white} % Asegura que las viñetas se vean
+editor: visual
+---
+
+## Diapositiva de Ejemplo (Fondo Oscuro Aplicado)
+
+El tema oscuro ya debería estar aplicado. Recuerda que la clave está en la sección `include-in-header` del YAML.
+
+## Viñetas
+
+Para que el texto aparezca gradualmente (fragmentos), solo necesitas dejar una línea vacía entre las viñetas.
+
+* Este es el primer punto, aparecerá primero.
+
+* Este es el segundo punto, aparecerá después.
+
+## Código
+
+Puedes incluir bloques de código como este:
+
+```{r}
+# Ejemplo de código R
+plot(cars, col = "lightblue", main = "Velocidad y Distancia de Frenado")
