@@ -1,0 +1,39 @@
+---
+title: ""
+author: ""
+date: ""
+format:
+  beamer:
+    theme: Dresden
+    colortheme: beetle
+    slide-level: 2
+    aspectratio: 169
+    include-in-header:
+      text: |
+        \usepackage{graphicx}
+        \usepackage{xcolor}
+        \setbeamertemplate{headline}{}
+        \setbeamertemplate{footline}{}
+        \setbeamertemplate{navigation symbols}{}
+        \setbeamersize{text margin left=0pt,text margin right=0pt}
+
+        % ===== Fondo condicional =====
+        % framenumber = 0 → portada
+        % framenumber >= 1 → contenido
+        \usebackgroundtemplate{%
+          \ifnum\value{framenumber}<2
+            \includegraphics[width=\paperwidth,height=\paperheight]{fn_169.png}%
+          \else
+            \includegraphics[width=\paperwidth,height=\paperheight]{fnd_169.png}%
+          \fi
+        }
+
+        % ===== Colores de texto (si fondo es oscuro) =====
+        \setbeamercolor{normal text}{fg=white}
+        \setbeamercolor{structure}{fg=orange}
+        \setbeamercolor{frametitle}{fg=white}
+        \setbeamercolor{title}{fg=white}
+---
+
+
+# Introducción

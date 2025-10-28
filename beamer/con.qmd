@@ -1,0 +1,21 @@
+---
+title: ""
+author: ""
+date: ""
+format:
+  beamer:
+    theme: "Dresden"
+    colortheme: "beetle"
+    slide-level: 2
+    # Configuración para inyectar comandos de LaTeX que fuerzan el tema oscuro
+    include-in-header:
+      text: |
+        \usepackage{xcolor}
+        % Aplicamos los colores de Beamer para fondo negro y fuentes blancas
+        \setbeamercolor{background canvas}{bg=black}
+        \setbeamercolor{normal text}{fg=white}
+        \setbeamercolor{structure}{fg=white} % Afecta a títulos y elementos estructurales
+        \setbeamercolor{itemize item}{fg=orange} % Asegura que las viñetas se vean
+---
+
+# Introducción
