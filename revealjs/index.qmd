@@ -25,7 +25,6 @@ format:
 
 
 
-
 <script>
 // URL de tu servidor multiplex en Render.com
 const serverUrl = 'https://multiplex-t9sz.onrender.com';
@@ -50,7 +49,11 @@ setInterval(keepAlive, 600000);
         const synth = window.speechSynthesis;
         let utterance;
         let paused = false;
+        
+        // VARIABLE DE CONTROL: Determina si la lectura automática está activa
+        let autoRead = true; 
 
+        // --- Botón Pantalla Completa ---
         const fullscreenButton = document.createElement('button');
         fullscreenButton.id = 'fullscreenButton';
         fullscreenButton.textContent = 'Pantalla Completa';
@@ -71,7 +74,12 @@ setInterval(keepAlive, 600000);
         `;
         document.body.appendChild(fullscreenButton);
 
+        // --- Funciones de Lectura ---
+
         const readIncrementalContent = (element) => {
+            // Si el modo autoRead está desactivado, no hace nada
+            if (!autoRead) return;
+
             if (utterance && synth.speaking) synth.cancel();
             let textToRead = element.textContent;
             if (textToRead.trim() !== '') {
@@ -84,21 +92,31 @@ setInterval(keepAlive, 600000);
         };
 
         const readCurrentSlide = () => {
+            // Si el modo autoRead está desactivado, no lee al cambiar de diapositiva
+            if (!autoRead) return;
+
             if (utterance && synth.speaking) synth.cancel();
-            const currentSlide = document.querySelector('.present');
-            const visibleElements = currentSlide.querySelectorAll('h1,h2,h3,h4,h5,h6,p,li:not([aria-hidden="true"]):not(.fragment)');
-            let textToRead = '';
-            visibleElements.forEach((el) => {
-                if (getComputedStyle(el).display !== 'none') textToRead += el.textContent + ' ';
-            });
-            if (textToRead.trim() !== '') {
-                utterance = new SpeechSynthesisUtterance(textToRead);
-                const voices = synth.getVoices();
-                const voice = voices.find(v => v.lang.startsWith('es-'));
-                if (voice) utterance.voice = voice;
-                synth.speak(utterance);
+            
+            // Usamos Reveal.getCurrentSlide() para evitar leer el H1 de la sección padre incorrectamente
+            const currentSlide = Reveal.getCurrentSlide();
+            
+            if (currentSlide) {
+                const visibleElements = currentSlide.querySelectorAll('h1,h2,h3,h4,h5,h6,p,li:not([aria-hidden="true"]):not(.fragment)');
+                let textToRead = '';
+                visibleElements.forEach((el) => {
+                    if (getComputedStyle(el).display !== 'none') textToRead += el.textContent + ' ';
+                });
+                if (textToRead.trim() !== '') {
+                    utterance = new SpeechSynthesisUtterance(textToRead);
+                    const voices = synth.getVoices();
+                    const voice = voices.find(v => v.lang.startsWith('es-'));
+                    if (voice) utterance.voice = voice;
+                    synth.speak(utterance);
+                }
             }
         };
+
+        // --- Eventos ---
 
         document.addEventListener('keydown', (event) => {
             if (event.key.toLowerCase() === 'q') {
@@ -115,6 +133,7 @@ setInterval(keepAlive, 600000);
         Reveal.on('slidechanged', () => readCurrentSlide());
         Reveal.on('fragmentshown', (event) => readIncrementalContent(event.fragment));
 
+        // --- Botón Reproducir ---
         const playButton = document.createElement('button');
         playButton.textContent = 'Reproducir';
         playButton.style.cssText = `
@@ -137,9 +156,38 @@ setInterval(keepAlive, 600000);
                 synth.cancel();
                 playButton.textContent = 'Reproducir';
             } else {
+                // Al presionar reproducir, REACTIVAMOS la lectura automática
+                autoRead = true; 
                 readCurrentSlide();
                 playButton.textContent = 'Detener';
             }
+        });
+
+        // --- Botón de Silencio (Mute Global) ---
+        const muteButton = document.createElement('button');
+        muteButton.textContent = '🔇'; 
+        muteButton.title = "Silenciar totalmente"; 
+        muteButton.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 150px; 
+            z-index: 1000;
+            padding: 10px 15px;
+            font-size: 20px; 
+            background-color: #dc3545; 
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        `;
+        document.body.appendChild(muteButton);
+
+        muteButton.addEventListener('click', () => {
+            // AJUSTE: Desactiva la lectura automática y detiene el audio actual
+            autoRead = false; 
+            synth.cancel(); 
+            playButton.textContent = 'Reproducir'; 
         });
 
         Reveal.initialize();
