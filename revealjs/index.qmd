@@ -25,11 +25,12 @@ format:
 
 
 
+
+
 <script>
 document.addEventListener('DOMContentLoaded', (event) => {
-    // 1. FILTRO DE SEGURIDAD: Si la URL tiene 'print-pdf', no ejecutar nada.
+    // 1. FILTRO DE SEGURIDAD PARA IMPRESIÓN
     if (window.location.search.match(/print-pdf/gi)) {
-        console.log("Modo impresión detectado: Desactivando scripts interactivos.");
         return; 
     }
 
@@ -37,7 +38,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let utterance;
     let paused = false;
 
-    // Crear botón de pantalla completa
+    // --- INTERFAZ DE USUARIO ---
     const fullscreenButton = document.createElement('button');
     fullscreenButton.id = 'fullscreenButton';
     fullscreenButton.textContent = 'Pantalla Completa';
@@ -49,52 +50,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     `;
     document.body.appendChild(fullscreenButton);
 
-    // Funciones de lectura
-    const readIncrementalContent = (element) => {
-        if (utterance && synth.speaking) synth.cancel();
-        let textToRead = element.textContent;
-        if (textToRead.trim() !== '') {
-            utterance = new SpeechSynthesisUtterance(textToRead);
-            const voices = synth.getVoices();
-            const voice = voices.find(v => v.lang.startsWith('es-'));
-            if (voice) utterance.voice = voice;
-            synth.speak(utterance);
-        }
-    };
-
-    const readCurrentSlide = () => {
-        if (utterance && synth.speaking) synth.cancel();
-        const currentSlide = document.querySelector('.present');
-        if (!currentSlide) return;
-        const visibleElements = currentSlide.querySelectorAll('h1,h2,h3,h4,h5,h6,p,li:not([aria-hidden="true"]):not(.fragment)');
-        let textToRead = '';
-        visibleElements.forEach((el) => {
-            if (getComputedStyle(el).display !== 'none') textToRead += el.textContent + ' ';
-        });
-        if (textToRead.trim() !== '') {
-            utterance = new SpeechSynthesisUtterance(textToRead);
-            const voices = synth.getVoices();
-            const voice = voices.find(v => v.lang.startsWith('es-'));
-            if (voice) utterance.voice = voice;
-            synth.speak(utterance);
-        }
-    };
-
-    // Eventos de teclado y Reveal
-    document.addEventListener('keydown', (e) => {
-        if (e.key.toLowerCase() === 'q') {
-            paused ? synth.resume() : synth.pause();
-            paused = !paused;
-        }
-    });
-
-    // Solo activar eventos de Reveal si Reveal existe
-    if (typeof Reveal !== 'undefined') {
-        Reveal.on('slidechanged', () => readCurrentSlide());
-        Reveal.on('fragmentshown', (e) => readIncrementalContent(e.fragment));
-    }
-
-    // Botón Reproducir
     const playButton = document.createElement('button');
     playButton.textContent = 'Reproducir';
     playButton.style.cssText = `
@@ -104,8 +59,85 @@ document.addEventListener('DOMContentLoaded', (event) => {
     `;
     document.body.appendChild(playButton);
 
+    // --- LÓGICA DE EXTRACCIÓN DE TEXTO ---
+
+    // Esta función es clave: extrae el texto del elemento pero IGNORA el texto de sus hijos (sub-listas)
+    const getDirectText = (el) => {
+        let child = el.firstChild;
+        let texts = [];
+        while (child) {
+            if (child.nodeType === 3) { // 3 es un Nodo de Texto
+                texts.push(child.data);
+            }
+            child = child.nextSibling;
+        }
+        return texts.join("").trim();
+    };
+
+    const getSpanishVoice = () => {
+        const voices = synth.getVoices();
+        return voices.find(v => v.lang.startsWith('es-')) || voices[0];
+    };
+
+    const speakText = (text) => {
+        if (synth.speaking) synth.cancel();
+        if (!text || text.trim() === '') return;
+
+        utterance = new SpeechSynthesisUtterance(text);
+        utterance.voice = getSpanishVoice();
+        synth.speak(utterance);
+    };
+
+    // --- FUNCIONES DE NAVEGACIÓN ---
+
+    const readCurrentSlide = () => {
+        // Seleccionamos la sección activa pero evitamos las que son solo contenedores (stack)
+        const currentSlide = document.querySelector('section.present:not(.stack), section.stack > section.present');
+        if (!currentSlide) return;
+
+        let totalText = "";
+        // Buscamos encabezados, párrafos y elementos de lista
+        const elements = currentSlide.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li');
+        
+        elements.forEach(el => {
+            // Solo leer si NO es un fragmento (es contenido base) o si es un fragmento ya visible
+            const isFragment = el.classList.contains('fragment');
+            const isVisible = el.classList.contains('visible');
+
+            if (!isFragment || (isFragment && isVisible)) {
+                const text = getDirectText(el);
+                if (text) totalText += text + ". ";
+            }
+        });
+        speakText(totalText);
+    };
+
+    // --- CONFIGURACIÓN DE REVEAL.JS ---
+
+    if (typeof Reveal !== 'undefined') {
+        Reveal.on('slidechanged', () => {
+            paused = false;
+            readCurrentSlide();
+        });
+
+        Reveal.on('fragmentshown', (event) => {
+            // Leer solo el texto del fragmento que acaba de aparecer
+            const text = getDirectText(event.fragment);
+            speakText(text);
+        });
+    }
+
+    // --- CONTROLES ---
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key.toLowerCase() === 'q') {
+            if (paused) { synth.resume(); } else { synth.pause(); }
+            paused = !paused;
+        }
+    });
+
     playButton.addEventListener('click', () => {
-        if (synth.speaking) {
+        if (synth.speaking && !paused) {
             synth.cancel();
             playButton.textContent = 'Reproducir';
         } else {
@@ -114,7 +146,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
-    // Lógica Pantalla Completa
     fullscreenButton.addEventListener('click', () => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen?.();
@@ -126,25 +157,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.addEventListener('fullscreenchange', () => {
         fullscreenButton.style.display = document.fullscreenElement ? 'none' : 'block';
     });
-});
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const fullscreenButton = document.getElementById('fullscreenButton');
-    function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen?.();
-        } else {
-            document.exitFullscreen?.();
-        }
-    }
-    function handleFullscreenChange() {
-        fullscreenButton.style.display = document.fullscreenElement ? 'none' : 'block';
-    }
-    if (fullscreenButton) {
-        fullscreenButton.addEventListener('click', toggleFullscreen);
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-    }
 });
 </script>
