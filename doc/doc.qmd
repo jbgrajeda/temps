@@ -1,0 +1,11 @@
+---
+title: ""
+lang: es-MX
+format: 
+  docx:
+    reference-doc: t.docx
+
+editor: visual
+bibliography: references.bib
+csl: apa7.csl
+---
