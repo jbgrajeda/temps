@@ -9,6 +9,9 @@ subtitle: "*Taller de Metodología de Investigación I*"
 author: "Dr. Jorge E. Bracamontes G."
 format:
   revealjs:
+    width: 1600
+    height: 900
+    margin: 0.1
     transition: zoom
     transition-speed: slow
     theme: night
@@ -26,136 +29,135 @@ format:
 
 
 
-
 <script>
-document.addEventListener('DOMContentLoaded', (event) => {
-    // 1. FILTRO DE SEGURIDAD PARA IMPRESIÓN
-    if (window.location.search.match(/print-pdf/gi)) {
-        return; 
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.search.match(/print-pdf/gi)) return;
+
+  const synth = window.speechSynthesis;
+  let utterance = null;
+  let paused = false;
+  let voicesReady = false;
+
+  const fullscreenButton = document.createElement('button');
+  fullscreenButton.id = 'fullscreenButton';
+  fullscreenButton.textContent = 'Pantalla completa';
+  fullscreenButton.style.cssText = `
+    position: fixed; bottom: 20px; left: 20px; z-index: 1000;
+    padding: 12px 20px; background-color: #ff7300; color: #ffffcc;
+    border: none; border-radius: 12px; font-size: 16px;
+    font-weight: bold; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  `;
+  document.body.appendChild(fullscreenButton);
+
+  const getSpanishVoice = () => {
+    const voices = synth.getVoices();
+    return voices.find(v => v.lang === 'es-MX') ||
+           voices.find(v => v.lang.startsWith('es-')) ||
+           voices[0] ||
+           null;
+  };
+
+  const cleanText = (text) =>
+    text
+      .replace(/\s+/g, ' ')
+      .replace(/([.!?])\s*\./g, '$1')
+      .trim();
+
+  const getReadableText = (el) => {
+    const clone = el.cloneNode(true);
+
+    clone.querySelectorAll('ul, ol').forEach(list => list.remove());
+    clone.querySelectorAll('script, style, button, .controls, .progress, .slide-number').forEach(x => x.remove());
+
+    return cleanText(clone.textContent || '');
+  };
+
+  const speakText = (text) => {
+    const finalText = cleanText(text);
+    if (!finalText) return;
+
+    synth.cancel();
+
+    utterance = new SpeechSynthesisUtterance(finalText);
+    utterance.lang = 'es-MX';
+    utterance.voice = getSpanishVoice();
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+
+    synth.speak(utterance);
+  };
+
+  const isReadable = (el) => {
+    if (!el) return false;
+
+    const style = window.getComputedStyle(el);
+    if (style.display === 'none' || style.visibility === 'hidden') return false;
+
+    if (el.classList.contains('fragment') && !el.classList.contains('visible')) return false;
+
+    return true;
+  };
+
+  const readCurrentSlide = () => {
+    const currentSlide =
+      document.querySelector('section.present:not(.stack)') ||
+      document.querySelector('section.stack.present > section.present');
+
+    if (!currentSlide) return;
+
+    const elements = currentSlide.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, blockquote');
+
+    let totalText = '';
+
+    elements.forEach(el => {
+      if (!isReadable(el)) return;
+
+      const text = getReadableText(el);
+      if (text) totalText += text + '. ';
+    });
+
+    speakText(totalText);
+  };
+
+  if (typeof Reveal !== 'undefined') {
+    Reveal.on('ready', readCurrentSlide);
+
+    Reveal.on('slidechanged', () => {
+      paused = false;
+      readCurrentSlide();
+    });
+
+    Reveal.on('fragmentshown', event => {
+      const text = getReadableText(event.fragment);
+      speakText(text);
+    });
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key.toLowerCase() === 'q') {
+      if (paused) {
+        synth.resume();
+      } else {
+        synth.pause();
+      }
+      paused = !paused;
     }
+  });
 
-    const synth = window.speechSynthesis;
-    let utterance;
-    let paused = false;
-
-    // --- INTERFAZ DE USUARIO ---
-    const fullscreenButton = document.createElement('button');
-    fullscreenButton.id = 'fullscreenButton';
-    fullscreenButton.textContent = 'Pantalla Completa';
-    fullscreenButton.style.cssText = `
-        position: fixed; bottom: 20px; left: 20px; z-index: 1000;
-        padding: 12px 20px; background-color: #ff7300; color: #ffffcc;
-        border: none; border-radius: 12px; font-size: 16px;
-        font-weight: bold; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    `;
-    document.body.appendChild(fullscreenButton);
-
-    const playButton = document.createElement('button');
-    playButton.textContent = 'Reproducir';
-    playButton.style.cssText = `
-        position: fixed; bottom: 20px; right: 20px; z-index: 1000;
-        padding: 10px 20px; font-size: 16px; background-color: #007bff;
-        color: white; border: none; border-radius: 5px; cursor: pointer;
-    `;
-    document.body.appendChild(playButton);
-
-    // --- LÓGICA DE EXTRACCIÓN DE TEXTO ---
-
-    // Esta función es clave: extrae el texto del elemento pero IGNORA el texto de sus hijos (sub-listas)
-    const getDirectText = (el) => {
-        let child = el.firstChild;
-        let texts = [];
-        while (child) {
-            if (child.nodeType === 3) { // 3 es un Nodo de Texto
-                texts.push(child.data);
-            }
-            child = child.nextSibling;
-        }
-        return texts.join("").trim();
-    };
-
-    const getSpanishVoice = () => {
-        const voices = synth.getVoices();
-        return voices.find(v => v.lang.startsWith('es-')) || voices[0];
-    };
-
-    const speakText = (text) => {
-        if (synth.speaking) synth.cancel();
-        if (!text || text.trim() === '') return;
-
-        utterance = new SpeechSynthesisUtterance(text);
-        utterance.voice = getSpanishVoice();
-        synth.speak(utterance);
-    };
-
-    // --- FUNCIONES DE NAVEGACIÓN ---
-
-    const readCurrentSlide = () => {
-        // Seleccionamos la sección activa pero evitamos las que son solo contenedores (stack)
-        const currentSlide = document.querySelector('section.present:not(.stack), section.stack > section.present');
-        if (!currentSlide) return;
-
-        let totalText = "";
-        // Buscamos encabezados, párrafos y elementos de lista
-        const elements = currentSlide.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li');
-        
-        elements.forEach(el => {
-            // Solo leer si NO es un fragmento (es contenido base) o si es un fragmento ya visible
-            const isFragment = el.classList.contains('fragment');
-            const isVisible = el.classList.contains('visible');
-
-            if (!isFragment || (isFragment && isVisible)) {
-                const text = getDirectText(el);
-                if (text) totalText += text + ". ";
-            }
-        });
-        speakText(totalText);
-    };
-
-    // --- CONFIGURACIÓN DE REVEAL.JS ---
-
-    if (typeof Reveal !== 'undefined') {
-        Reveal.on('slidechanged', () => {
-            paused = false;
-            readCurrentSlide();
-        });
-
-        Reveal.on('fragmentshown', (event) => {
-            // Leer solo el texto del fragmento que acaba de aparecer
-            const text = getDirectText(event.fragment);
-            speakText(text);
-        });
+  fullscreenButton.addEventListener('click', async () => {
+    if (!document.fullscreenElement) {
+      await document.documentElement.requestFullscreen?.();
+    } else {
+      await document.exitFullscreen?.();
     }
+  });
 
-    // --- CONTROLES ---
+  document.addEventListener('fullscreenchange', () => {
+    fullscreenButton.style.display = document.fullscreenElement ? 'none' : 'block';
+  });
 
-    document.addEventListener('keydown', (e) => {
-        if (e.key.toLowerCase() === 'q') {
-            if (paused) { synth.resume(); } else { synth.pause(); }
-            paused = !paused;
-        }
-    });
-
-    playButton.addEventListener('click', () => {
-        if (synth.speaking && !paused) {
-            synth.cancel();
-            playButton.textContent = 'Reproducir';
-        } else {
-            readCurrentSlide();
-            playButton.textContent = 'Detener';
-        }
-    });
-
-    fullscreenButton.addEventListener('click', () => {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen?.();
-        } else {
-            document.exitFullscreen?.();
-        }
-    });
-
-    document.addEventListener('fullscreenchange', () => {
-        fullscreenButton.style.display = document.fullscreenElement ? 'none' : 'block';
-    });
+  synth.onvoiceschanged = () => {
+    voicesReady = true;
+  };
 });
 </script>
