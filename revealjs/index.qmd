@@ -1,12 +1,7 @@
 ---
-project:
-  type: default   # convierte la carpeta en proyecto Quarto
-
-metadata-files:
-  - ../multi.yml 
-title: ""
-subtitle: "*Taller de Metodología de Investigación I*"
-author: "Dr. Jorge E. Bracamontes G."
+title: "La articulación de la protesta"
+subtitle: "*Los condenados de la pantalla (2012)* -- Hito Steyerl"
+author: "Presenta:  Jorge E. Bracamontes G."
 format:
   revealjs:
     width: 1600
@@ -24,6 +19,10 @@ format:
       data-background-size: "cover"
       data-background-opacity: "1.0"
 ---
+
+
+
+
 
 
 
