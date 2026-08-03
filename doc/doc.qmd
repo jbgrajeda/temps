@@ -5,7 +5,6 @@ format:
   docx:
     reference-doc: t.docx
 
-editor: visual
-bibliography: references.bib
+bibliography: /Users/jbgrajeda/Documents/FTS/SALA DE VIAJE/refer.bib
 csl: apa7.csl
 ---
