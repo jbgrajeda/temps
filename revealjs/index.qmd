@@ -1,7 +1,7 @@
 ---
-title: "La articulación de la protesta"
-subtitle: "*Los condenados de la pantalla (2012)* -- Hito Steyerl"
-author: "Presenta:  Jorge E. Bracamontes G."
+title: ""
+subtitle: ""
+author: "Dr.  Jorge E. Bracamontes G."
 format:
   revealjs:
     width: 1600
@@ -22,6 +22,292 @@ format:
 
 
 
+<span class="flecha">↕</span>
+
+**persona cuidadora**
+
+:::
+
+---
+
+# Pero detrás existen...
+
+Legislación laboral
+
+Salario
+
+Seguridad social
+
+Contratos
+
+Normas de género
+
+Servicios públicos
+
+Mercado de trabajo
+
+---
+
+# Entonces...
+
+## ¿es una relación puramente privada?
+
+---
+
+# Instituciones contexto
+
+Una decisión económica está situada dentro de:
+
+**reglas + historia + relaciones sociales + prácticas**
+
+---
+
+# Otro cuidado posible
+
+Una hija deja temporalmente su empleo para cuidar a su madre.
+
+No existe contrato.
+
+No existe salario.
+
+---
+
+# Pregunta
+
+## ¿significa eso que no intervienen instituciones?
+
+---
+
+# Pensemos
+
+Familia
+
+Género
+
+Mercado laboral
+
+Sistema de cuidados
+
+Protección social
+
+Normas culturales
+
+---
+
+# Incluso fuera del mercado...
+
+## las alternativas están institucionalmente configuradas
+
+---
+
+# Pero no queremos otro extremo
+
+No es simplemente:
+
+# instituciones → personas
+
+---
+
+# Las personas también...
+
+interpretan reglas
+
+reproducen prácticas
+
+modifican acuerdos
+
+incumplen normas
+
+crean nuevas prácticas
+
+---
+
+# Por tanto
+
+::: {.flujo}
+
+**instituciones**
+
+<span class="flecha">↕</span>
+
+**prácticas sociales**
+
+:::
+
+---
+
+# Primera conclusión
+
+## Las restricciones económicas no simplemente “están ahí”
+
+---
+
+# Muchas son producidas por...
+
+Reglas
+
+Derechos
+
+Obligaciones
+
+Prácticas
+
+Instituciones
+
+---
+
+# Recupera tu problema
+
+La situación que comenzaste a analizar en la sesión 1.
+
+---
+
+# Ya habías identificado
+
+Necesidad
+
+Recursos
+
+Restricciones
+
+Decisión
+
+Costos
+
+---
+
+# Agrega ahora una nueva capa
+
+# Instituciones
+
+---
+
+# Pregunta 1
+
+## ¿Qué restricciones dependen de reglas, derechos, obligaciones o prácticas sociales?
+
+---
+
+# Pregunta 2
+
+## ¿Qué institución amplía las alternativas disponibles?
+
+---
+
+# Producto de la sesión
+
+Completa:
+
+## En esta situación, las alternativas disponibles están condicionadas por...
+
+---
+
+# Después
+
+## Una institución que restringe las alternativas es...
+
+### porque...
+
+---
+
+# Y también
+
+## Una institución que amplía las alternativas es...
+
+### porque...
+
+---
+
+# Volvamos al caso inicial
+
+> Una persona de 68 años continúa trabajando porque no tiene pensión.
+
+---
+
+# Antes podíamos decir
+
+## enfrenta una restricción económica
+
+---
+
+# Ahora podemos decir
+
+## esa restricción está institucionalmente configurada
+
+---
+
+# Puede depender de...
+
+Trayectoria laboral
+
+Reglas de cotización
+
+Formalidad laboral
+
+Sistema previsional
+
+Derechos adquiridos
+
+---
+
+# Pero todavía tenemos un problema
+
+Dos personas pueden vivir dentro del mismo país...
+
+tener edades semejantes...
+
+y llegar a la vejez en condiciones económicas radicalmente diferentes.
+
+---
+
+# Entonces aparece la siguiente pregunta
+
+## ¿Cómo se producen formas desiguales de envejecer?
+
+---
+
+# Próxima sesión
+
+### Sesión 3
+
+## Trayectorias
+
+## Estratificación
+
+## Desigualdad
+
+## Distribución de recursos
+
+---
+
+# Nuestro recorrido
+
+::: {.flujo}
+
+**Sesión 1**
+
+recursos · restricciones · decisiones · costos
+
+<span class="flecha">↓</span>
+
+**Sesión 2**
+
+instituciones · reglas · alternativas
+
+<span class="flecha">↓</span>
+
+**Sesión 3**
+
+trayectorias · desigualdad
+
+:::
+
+---
+
+# Una misma situación
+
+## nuevas capas de análisis
+
 
 
 
@@ -35,115 +321,251 @@ document.addEventListener('DOMContentLoaded', () => {
   const synth = window.speechSynthesis;
   let utterance = null;
   let paused = false;
-  let voicesReady = false;
+
+  // -----------------------------
+  // BOTÓN PANTALLA COMPLETA
+  // -----------------------------
 
   const fullscreenButton = document.createElement('button');
   fullscreenButton.id = 'fullscreenButton';
   fullscreenButton.textContent = 'Pantalla completa';
+
   fullscreenButton.style.cssText = `
-    position: fixed; bottom: 20px; left: 20px; z-index: 1000;
-    padding: 12px 20px; background-color: #ff7300; color: #ffffcc;
-    border: none; border-radius: 12px; font-size: 16px;
-    font-weight: bold; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    padding: 12px 20px;
+    background-color: #ff7300;
+    color: #ffffcc;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   `;
+
   document.body.appendChild(fullscreenButton);
+
+  // -----------------------------
+  // VOZ
+  // -----------------------------
 
   const getSpanishVoice = () => {
     const voices = synth.getVoices();
-    return voices.find(v => v.lang === 'es-MX') ||
-           voices.find(v => v.lang.startsWith('es-')) ||
-           voices[0] ||
-           null;
+
+    return (
+      voices.find(v => v.lang === 'es-MX') ||
+      voices.find(v => v.lang.startsWith('es-MX')) ||
+      voices.find(v => v.lang.startsWith('es-')) ||
+      null
+    );
   };
 
-  const cleanText = (text) =>
-    text
+  // -----------------------------
+  // LIMPIEZA DE TEXTO
+  // -----------------------------
+
+  const cleanText = text =>
+    (text || '')
       .replace(/\s+/g, ' ')
-      .replace(/([.!?])\s*\./g, '$1')
+      .replace(/\s+([.,;:!?])/g, '$1')
       .trim();
 
-  const getReadableText = (el) => {
+  const getReadableText = el => {
+    if (!el) return '';
+
     const clone = el.cloneNode(true);
 
-    clone.querySelectorAll('ul, ol').forEach(list => list.remove());
-    clone.querySelectorAll('script, style, button, .controls, .progress, .slide-number').forEach(x => x.remove());
+    clone
+      .querySelectorAll(
+        'script, style, button, .controls, .progress, .slide-number'
+      )
+      .forEach(x => x.remove());
 
-    return cleanText(clone.textContent || '');
+    return cleanText(clone.textContent);
   };
 
-  const speakText = (text) => {
+  // -----------------------------
+  // VISIBILIDAD
+  // -----------------------------
+
+  const isReadable = el => {
+    if (!el) return false;
+
+    const style = window.getComputedStyle(el);
+
+    if (
+      style.display === 'none' ||
+      style.visibility === 'hidden'
+    ) {
+      return false;
+    }
+
+    // Comprueba también fragments antecesores.
+    const fragment = el.closest('.fragment');
+
+    if (
+      fragment &&
+      !fragment.classList.contains('visible') &&
+      !fragment.classList.contains('current-fragment')
+    ) {
+      return false;
+    }
+
+    return true;
+  };
+
+  // -----------------------------
+  // HABLAR
+  // -----------------------------
+
+  const speakText = text => {
     const finalText = cleanText(text);
+
     if (!finalText) return;
 
     synth.cancel();
 
     utterance = new SpeechSynthesisUtterance(finalText);
+
     utterance.lang = 'es-MX';
-    utterance.voice = getSpanishVoice();
+
+    const voice = getSpanishVoice();
+
+    if (voice) {
+      utterance.voice = voice;
+    }
+
     utterance.rate = 0.95;
     utterance.pitch = 1;
+
+    utterance.onend = () => {
+      paused = false;
+    };
 
     synth.speak(utterance);
   };
 
-  const isReadable = (el) => {
-    if (!el) return false;
-
-    const style = window.getComputedStyle(el);
-    if (style.display === 'none' || style.visibility === 'hidden') return false;
-
-    if (el.classList.contains('fragment') && !el.classList.contains('visible')) return false;
-
-    return true;
-  };
+  // -----------------------------
+  // LEER DIAPOSITIVA ACTUAL
+  // -----------------------------
 
   const readCurrentSlide = () => {
-    const currentSlide =
-      document.querySelector('section.present:not(.stack)') ||
-      document.querySelector('section.stack.present > section.present');
+    if (typeof Reveal === 'undefined') return;
+
+    const currentSlide = Reveal.getCurrentSlide();
 
     if (!currentSlide) return;
 
-    const elements = currentSlide.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, blockquote');
+    const elements = currentSlide.querySelectorAll(
+      'h1, h2, h3, h4, h5, h6, p, li, blockquote'
+    );
 
-    let totalText = '';
+    const pieces = [];
 
     elements.forEach(el => {
       if (!isReadable(el)) return;
 
+      // Evita duplicar párrafos contenidos dentro de blockquote.
+      if (
+        el.tagName === 'P' &&
+        el.closest('blockquote')
+      ) {
+        return;
+      }
+
       const text = getReadableText(el);
-      if (text) totalText += text + '. ';
+
+      if (text) {
+        pieces.push(text);
+      }
     });
 
-    speakText(totalText);
+    speakText(pieces.join('. '));
   };
 
-  if (typeof Reveal !== 'undefined') {
-    Reveal.on('ready', readCurrentSlide);
+  // -----------------------------
+  // LEER FRAGMENTO
+  // -----------------------------
+
+  const readFragment = fragment => {
+    if (!fragment) return;
+
+    const text = getReadableText(fragment);
+
+    if (text) {
+      speakText(text);
+    }
+  };
+
+  // -----------------------------
+  // REVEAL
+  // -----------------------------
+
+  const initializeTTS = () => {
 
     Reveal.on('slidechanged', () => {
+      synth.cancel();
       paused = false;
-      readCurrentSlide();
+
+      // Pequeño retraso para que Reveal termine
+      // de actualizar fragments y visibilidad.
+      setTimeout(readCurrentSlide, 80);
     });
 
     Reveal.on('fragmentshown', event => {
-      const text = getReadableText(event.fragment);
-      speakText(text);
+      paused = false;
+
+      setTimeout(() => {
+        readFragment(event.fragment);
+      }, 40);
     });
+
+    // Leer la diapositiva inicial.
+    setTimeout(readCurrentSlide, 150);
+  };
+
+  if (typeof Reveal !== 'undefined') {
+    if (Reveal.isReady()) {
+      initializeTTS();
+    } else {
+      Reveal.on('ready', initializeTTS);
+    }
   }
 
+  // -----------------------------
+  // TECLADO
+  // -----------------------------
+
   document.addEventListener('keydown', e => {
+
+    // Q = pausa / continuar
     if (e.key.toLowerCase() === 'q') {
+
       if (paused) {
         synth.resume();
-      } else {
+        paused = false;
+      } else if (synth.speaking) {
         synth.pause();
+        paused = true;
       }
-      paused = !paused;
+    }
+
+    // R = volver a leer diapositiva
+    if (e.key.toLowerCase() === 'r') {
+      paused = false;
+      readCurrentSlide();
     }
   });
 
+  // -----------------------------
+  // PANTALLA COMPLETA
+  // -----------------------------
+
   fullscreenButton.addEventListener('click', async () => {
+
     if (!document.fullscreenElement) {
       await document.documentElement.requestFullscreen?.();
     } else {
@@ -152,11 +574,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.addEventListener('fullscreenchange', () => {
-    fullscreenButton.style.display = document.fullscreenElement ? 'none' : 'block';
+    fullscreenButton.style.display =
+      document.fullscreenElement ? 'none' : 'block';
   });
-
-  synth.onvoiceschanged = () => {
-    voicesReady = true;
-  };
 });
 </script>
