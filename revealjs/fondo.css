@@ -1,16 +1,27 @@
-.slide-background-content{
-    background-image: url("images/fnd.png");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+/* =========================================
+   FONDO GENERAL DE LAS DIAPOSITIVAS
+   ========================================= */
+
+.slide-background-content {
+  background-image: url("images/fnd.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-h2{
-    text-align: top;
-}
+
+
+/* =========================================
+   PORTADA
+   ========================================= */
 
 #title-slide h1.title {
   font-size: 1.6em !important;
 }
+
+
+/* =========================================
+   ACCESIBILIDAD
+   ========================================= */
 
 .sr-only {
   position: absolute;
@@ -24,6 +35,11 @@ h2{
   border: 0;
 }
 
+
+/* =========================================
+   DIAPOSITIVAS ESPECIALES
+   ========================================= */
+
 .reveal .slides section.titulo-mapa {
   justify-content: flex-start !important;
   padding-top: 0 !important;
@@ -36,7 +52,7 @@ h2{
   font-size: 1.3em;
   color: white;
   z-index: 10;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0, 0, 0, 0.35);
   padding: 10px 14px;
   border-radius: 8px;
 }
@@ -44,4 +60,97 @@ h2{
 .subtit-mapa {
   font-size: 0.8em;
   font-style: italic;
+}
+
+
+/* =========================================
+   FLUJOS CENTRADOS
+   ========================================= */
+
+.flujo {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35em;
+  margin-top: 1em;
+}
+
+.flecha {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  margin: 0.1em auto;
+
+  border: 2px solid #d88a3d;
+  border-radius: 50%;
+
+  color: #FFD54F;
+  border-color: #FFD54F;
+  font-size: 1.25em;
+  line-height: 1;
+}
+
+
+/* =========================================
+   TEXTO TIPO H2 SIN CREAR UN ENCABEZADO
+   ========================================= */
+
+.h2-text p {
+  font-size: 58px !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  color: white !important;
+  margin: 0.25em 0 !important;
+}
+
+
+/* =========================================
+   TAMAÑOS AUXILIARES
+   ========================================= */
+
+.fsg {
+  font-size: 3.4rem;
+}
+
+.fsch {
+  font-size: 2.2rem;
+}
+
+
+/* =========================================
+   TABLAS
+   ========================================= */
+
+.cont-tabla {
+  margin-top: 75px;
+}
+
+
+/* =========================================
+   COLUMNAS: SOLO CUANDO SE SOLICITEN
+   ========================================= */
+
+.reveal .slides section .columns {
+  display: flex;
+}
+
+.reveal .slides section .column {
+  flex: 1;
+}
+
+.reveal .slides section .v-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.reveal .slides section .v-center li {
+  font-size: 3rem;
+  text-align: left;
 }
