@@ -1,0 +1,109 @@
+---
+title: "Título de la nota"
+subtitle: "Notas sobre *Título de la obra*"
+
+# Autoría de estas notas
+author: "Nombre de quien elabora las notas"
+
+# Fecha de publicación de la nota
+date: 2026-08-23
+date-format: "D [de] MMMM [de] YYYY"
+
+# Sirven para organizar y relacionar las lecturas
+categories:
+  - Autor leído
+  - Tema principal
+  - Otro tema
+
+# Metadatos propios de Cuaderno abierto de lecturas
+obra:
+  autor: "Nombre del autor o autora de la obra"
+  titulo: "Título completo de la obra"
+  seccion: "Capítulo, apartado o páginas trabajadas"
+
+estado: "en proceso"
+---
+
+::: {.ficha-lectura}
+
+**Autor de la obra:** Nombre del autor o autora  
+**Obra:** *Título de la obra*  
+**Sección leída:** Capítulo, apartado o páginas  
+**Notas elaboradas por:** Nombre de quien elabora las notas
+
+:::
+
+
+::: {.entrada}
+
+Estas notas recogen problemas, conceptos, fragmentos y relaciones surgidos durante la lectura. No pretenden sustituir el texto original ni constituir necesariamente un resumen exhaustivo.
+
+:::
+
+
+## Primer problema o eje de lectura
+
+Desarrollar aquí la nota.
+
+No es necesario seguir una estructura predeterminada. Los encabezados pueden organizarse según los problemas, conceptos o movimientos argumentales que hayan resultado relevantes durante la lectura.
+
+
+## Segundo problema o eje de lectura
+
+Continuar aquí el desarrollo de las notas.
+
+
+### Un concepto relevante
+
+Desarrollo del concepto, problema o argumento.
+
+
+::: {.cita-lectura}
+
+> Fragmento seleccionado durante la lectura.
+
+<span class="referencia-cita">Apellido, p. XX</span>
+
+:::
+
+
+::: {.nota-lectura}
+
+**Nota de lectura**
+
+Comentario, interpretación, duda o elaboración propia a partir del fragmento anterior.
+
+:::
+
+
+## Otro eje de lectura
+
+Desarrollo libre.
+
+
+::: {.conexion}
+
+### ↗ Conexión de lectura
+
+Esta cuestión puede ponerse en relación con otra obra, autor, concepto o nota del Cuaderno.
+
+La conexión es elaborada por quien escribe las notas y no implica necesariamente que el autor leído establezca explícitamente esta relación.
+
+:::
+
+
+## Preguntas que deja la lectura
+
+::: {.preguntas}
+
+- ¿Qué problema queda abierto?
+- ¿Qué aspecto requiere volver al texto?
+- ¿Con qué otra lectura podría ponerse en relación?
+- ¿Qué consecuencias tendría esta formulación?
+
+:::
+
+
+## Referencia
+
+Apellido, N. (Año). *Título de la obra*. Editorial.
