@@ -1,19 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
   if (window.location.search.match(/print-pdf/gi)) return;
+  if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
 
   const synth = window.speechSynthesis;
   let utterance = null;
   let paused = false;
+  let ttsActivated = false;
 
   // -----------------------------
-  // BOTÓN PANTALLA COMPLETA
+  // BOTÓN ÚNICO DE INICIO
   // -----------------------------
 
-  const fullscreenButton = document.createElement('button');
-  fullscreenButton.id = 'fullscreenButton';
-  fullscreenButton.textContent = 'Pantalla completa';
+  const startButton = document.createElement('button');
+  startButton.id = 'startPresentationButton';
+  startButton.textContent = 'Iniciar presentación';
 
-  fullscreenButton.style.cssText = `
+  startButton.style.cssText = `
     position: fixed;
     bottom: 20px;
     left: 20px;
@@ -29,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   `;
 
-  document.body.appendChild(fullscreenButton);
+  document.body.appendChild(startButton);
 
   // -----------------------------
   // VOZ
@@ -39,9 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const voices = synth.getVoices();
 
     return (
-      voices.find(v => v.lang === 'es-MX') ||
-      voices.find(v => v.lang.startsWith('es-MX')) ||
-      voices.find(v => v.lang.startsWith('es-')) ||
+      voices.find(v => v.lang && v.lang.startsWith('es-')) ||
       null
     );
   };
@@ -71,35 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // -----------------------------
-  // VISIBILIDAD
-  // -----------------------------
-
-  const isReadable = el => {
-    if (!el) return false;
-
-    const style = window.getComputedStyle(el);
-
-    if (
-      style.display === 'none' ||
-      style.visibility === 'hidden'
-    ) {
-      return false;
-    }
-
-    const fragment = el.closest('.fragment');
-
-    if (
-      fragment &&
-      !fragment.classList.contains('visible') &&
-      !fragment.classList.contains('current-fragment')
-    ) {
-      return false;
-    }
-
-    return true;
-  };
-
-  // -----------------------------
   // HABLAR
   // -----------------------------
 
@@ -108,11 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!finalText) return;
 
-    synth.cancel();
+    // En iOS evitamos cancelar antes de la primera reproducción.
+    if (utterance && synth.speaking) {
+      synth.cancel();
+    }
 
     utterance = new SpeechSynthesisUtterance(finalText);
-
-    utterance.lang = 'es-MX';
 
     const voice = getSpanishVoice();
 
@@ -120,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       utterance.voice = voice;
     }
 
+    utterance.lang = 'es-MX';
     utterance.rate = 0.95;
     utterance.pitch = 1;
 
@@ -131,47 +104,48 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // -----------------------------
-  // LEER DIAPOSITIVA ACTUAL
+  // LEER CONTENIDO BASE
+  // DE LA DIAPOSITIVA
   // -----------------------------
 
   const readCurrentSlide = () => {
     if (typeof Reveal === 'undefined') return;
 
-    const currentSlide = Reveal.getCurrentSlide();
+    const currentSlide =
+      Reveal.getCurrentSlide?.() ||
+      document.querySelector('.reveal .slides section.present');
 
     if (!currentSlide) return;
 
-    const elements = currentSlide.querySelectorAll(
-      'h1, h2, h3, h4, h5, h6, p, li, blockquote'
-    );
+    // Clonamos toda la diapositiva para poder limpiar
+    // sin modificar lo que se ve en pantalla.
+    const clone = currentSlide.cloneNode(true);
 
-    const pieces = [];
+    // El contenido incremental NO se lee al entrar.
+    // Cada fragmento se leerá cuando Reveal dispare fragmentshown.
+    clone
+      .querySelectorAll('.fragment')
+      .forEach(el => el.remove());
 
-    elements.forEach(el => {
-      if (!isReadable(el)) return;
+    // Eliminamos elementos que no deben formar parte de la lectura.
+    clone
+      .querySelectorAll(
+        'script, style, button, .controls, .progress, .slide-number'
+      )
+      .forEach(el => el.remove());
 
-      if (
-        el.tagName === 'P' &&
-        el.closest('blockquote')
-      ) {
-        return;
-      }
+    const text = cleanText(clone.textContent);
 
-      const text = getReadableText(el);
-
-      if (text) {
-        pieces.push(text);
-      }
-    });
-
-    speakText(pieces.join('. '));
+    if (text) {
+      speakText(text);
+    }
   };
 
   // -----------------------------
-  // LEER FRAGMENTO
+  // LEER SOLO EL FRAGMENTO NUEVO
   // -----------------------------
 
-  const readFragment = fragment => {
+  const readIncrementalContent = fragment => {
     if (!fragment) return;
 
     const text = getReadableText(fragment);
@@ -188,25 +162,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const initializeTTS = () => {
 
     Reveal.on('slidechanged', () => {
-      synth.cancel();
-      paused = false;
+      if (!ttsActivated) return;
 
-      setTimeout(readCurrentSlide, 80);
+      paused = false;
+      readCurrentSlide();
     });
 
     Reveal.on('fragmentshown', event => {
+      if (!ttsActivated) return;
+
       paused = false;
-
-      setTimeout(() => {
-        readFragment(event.fragment);
-      }, 40);
+      readIncrementalContent(event.fragment);
     });
-
-    setTimeout(readCurrentSlide, 150);
   };
 
   if (typeof Reveal !== 'undefined') {
-    if (Reveal.isReady()) {
+    if (Reveal.isReady?.()) {
       initializeTTS();
     } else {
       Reveal.on('ready', initializeTTS);
@@ -214,14 +185,46 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // -----------------------------
+  // INICIAR PRESENTACIÓN
+  // -----------------------------
+
+  startButton.addEventListener('click', () => {
+    ttsActivated = true;
+    paused = false;
+
+    // Debe ejecutarse directamente dentro del gesto
+    // del usuario para funcionar correctamente en iOS.
+    readCurrentSlide();
+
+    // Después solicitamos pantalla completa.
+    if (!document.fullscreenElement) {
+      const request =
+        document.documentElement.requestFullscreen?.();
+
+      request?.catch?.(() => {});
+    }
+  });
+
+  // -----------------------------
+  // PANTALLA COMPLETA
+  // -----------------------------
+
+  document.addEventListener('fullscreenchange', () => {
+    startButton.style.display =
+      document.fullscreenElement
+        ? 'none'
+        : 'block';
+  });
+
+  // -----------------------------
   // TECLADO
   // -----------------------------
 
-  document.addEventListener('keydown', e => {
+  document.addEventListener('keydown', event => {
+    const key = event.key.toLowerCase();
 
     // Q = pausa / continuar
-    if (e.key.toLowerCase() === 'q') {
-
+    if (key === 'q') {
       if (paused) {
         synth.resume();
         paused = false;
@@ -231,28 +234,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // R = volver a leer diapositiva
-    if (e.key.toLowerCase() === 'r') {
+    // R = volver a leer la diapositiva actual
+    if (
+      key === 'r' &&
+      ttsActivated
+    ) {
       paused = false;
       readCurrentSlide();
     }
-  });
-
-  // -----------------------------
-  // PANTALLA COMPLETA
-  // -----------------------------
-
-  fullscreenButton.addEventListener('click', async () => {
-
-    if (!document.fullscreenElement) {
-      await document.documentElement.requestFullscreen?.();
-    } else {
-      await document.exitFullscreen?.();
-    }
-  });
-
-  document.addEventListener('fullscreenchange', () => {
-    fullscreenButton.style.display =
-      document.fullscreenElement ? 'none' : 'block';
   });
 });
