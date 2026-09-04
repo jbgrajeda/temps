@@ -86,11 +86,10 @@
 
   margin: 0.1em auto;
 
-  border: 2px solid #d88a3d;
+  border: 2px solid #FFD54F;
   border-radius: 50%;
 
   color: #FFD54F;
-  border-color: #FFD54F;
   font-size: 1.25em;
   line-height: 1;
 }
@@ -153,4 +152,88 @@
 .reveal .slides section .v-center li {
   font-size: 3rem;
   text-align: left;
+}
+
+
+/* =========================================
+   JERARQUÍA HORIZONTAL DEL CONTENIDO
+   Títulos y texto normal conservan su eje.
+   Fragmentos, listas y citas se desplazan
+   claramente hacia la derecha.
+   ========================================= */
+
+
+/* -----------------------------------------
+   PÁRRAFOS QUE APARECEN COMO FRAGMENTOS
+   ----------------------------------------- */
+
+.reveal .slides section p.fragment,
+.reveal .slides section .fragment p {
+  margin-left: 150px !important;
+  margin-right: 60px !important;
+  max-width: calc(100% - 210px) !important;
+}
+
+
+/* -----------------------------------------
+   LISTAS
+   No dependemos de que sean hijas directas
+   de section: Quarto puede envolverlas.
+   ----------------------------------------- */
+
+.reveal .slides section ul,
+.reveal .slides section ol {
+  margin-left: 170px !important;
+  margin-right: 60px !important;
+  padding-left: 1.2em !important;
+  width: calc(100% - 230px) !important;
+  box-sizing: border-box !important;
+}
+
+
+/* -----------------------------------------
+   ELEMENTOS DE LISTA
+
+   No añadimos otra sangría individual.
+   El desplazamiento lo hace la lista completa.
+   ----------------------------------------- */
+
+.reveal .slides section ul li,
+.reveal .slides section ol li,
+.reveal .slides section li.fragment {
+  margin-left: 0 !important;
+}
+
+
+/* -----------------------------------------
+   PREGUNTAS Y CITAS DESTACADAS
+   ----------------------------------------- */
+
+.reveal .slides section blockquote {
+  margin-left: 150px !important;
+  margin-right: 60px !important;
+  width: calc(100% - 210px) !important;
+  box-sizing: border-box !important;
+}
+
+
+/* -----------------------------------------
+   EXCEPCIONES
+
+   Las listas contenidas en columnas o flujos
+   mantienen su propia composición.
+   ----------------------------------------- */
+
+.reveal .slides section .columns ul,
+.reveal .slides section .columns ol {
+  margin-left: 1em !important;
+  margin-right: 0 !important;
+  width: auto !important;
+}
+
+.reveal .slides section .flujo ul,
+.reveal .slides section .flujo ol {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: auto !important;
 }
